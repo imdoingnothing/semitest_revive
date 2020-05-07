@@ -29,6 +29,7 @@
 <style>
 	body{
 		background : url('<%=request.getContextPath()%>/image/city1.PNG') no-repeat ;
+		background-size : cover;
 	}
 	#loginBtn input, #memberJoinBtn, #logoutBtn, #myPage{
 		display : inline-block;
