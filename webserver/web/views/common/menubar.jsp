@@ -153,7 +153,8 @@
 			
 		}
 		function goBoard(){
-			
+			location.href="<%=request.getContextPath()%>/list.bo";
+			//boardListServlet 생성
 		}
 		function goThumbnail(){
 			
