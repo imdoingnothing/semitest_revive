@@ -3,6 +3,7 @@ package board.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,15 +30,17 @@ public class BoardListServlet extends HttpServlet {
 		int startPage;				//한번에 표시될 페이지가 시작할 페이지
 		int endPage;				//한번에 표시될 페이지가 끝나는 페이지
 //		기본 게시판 페이지는 1페이지부터 시작
-		currentPage = 1;
+		currentPage = 0;
 //		페이지 전환시 전달받은 현재 페이지가 있을 시 해당 페이지를 currentPage로 적용
 		if(request.getParameter("currentPage") != null) {		//!request.getParameter("currentPage").equals(null)
 			currentPage = Integer.valueOf(request.getParameter("currentPage"));
+		} else {
+			currentPage = 1;
 		}
 		limit = 10;
 		maxPage = (int)((double)listCount/limit + 0.9);
 //		아래쪽에 페이지수가 10개씩 보여지게 할 경우1, 11, 21,...
-		startPage = ((int)((double)(currentPage/limit + 0.9) -1) * limit + 1);
+		startPage = (((int)((double)currentPage/limit + 0.9)) -1) * limit + 1;
 		endPage = startPage + limit - 1;
 		
 //		ex)총 23페이지일 경우 20~30은 아니니까 설정을 따로 해줘야한다.
@@ -47,15 +50,22 @@ public class BoardListServlet extends HttpServlet {
 		PageInfo pi = new PageInfo(listCount, currentPage, limit, maxPage, startPage, endPage);
 //		게시판에 뿌려줄 리스트 조회
 		ArrayList<Board> list = bService.selectList(currentPage, limit);
-		for(int i = 0; i < list.size(); i++) {
-			System.out.println(list.get(i));
+		RequestDispatcher view = null;
+		if(!list.isEmpty()) {
+			view = request.getRequestDispatcher("views/board/boardListView.jsp");
+			request.setAttribute("list", list);
+			request.setAttribute("pi", pi);
 		}
+		else {
+			view = request.getRequestDispatcher("views/common/errorPage.jsp");
+			request.setAttribute("msg", "게시판 조회 실패");
+		}
+		view.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-
 }
 
 
