@@ -42,6 +42,7 @@
 		> Project의 Meta-inf아래에 붙여넣기 <br>
 		> 붙여넣은 context.xml안에 있는 context 태그의 workDir 속성에<br>
 		> 경로를 써넣자(WEB-INF 아래의 jspwork폴더 경로)<br>
+	6. 깃허브
 -->
 </body>
 </html>
